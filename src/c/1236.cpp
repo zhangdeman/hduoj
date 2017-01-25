@@ -48,56 +48,53 @@ CS004 37
 1
 CS000000000000000002 20
  */
-#include <stdio.h>
-#include <string.h>
-typedef struct {
-    int score;
-    char *number;
-} student;
-
-int main(){
-    int studentNum , problemNum , score;
-    while ( scanf("%d" , &studentNum) && studentNum != 0 ){
-        student allAcStudent[studentNum];
-        scanf("%d%d",&problemNum , &score);
-        int i;
-        int problemScore[problemNum];
-        for ( i = 0; i < problemNum; i++ ){
-            scanf("%d",&problemScore[i]);
+#include<stdio.h>
+#include<string.h>
+#include<algorithm>
+using namespace std;
+struct st
+{
+    char xuehao[22];
+    int fen;
+}data[1010];
+int cmp(st a,st b)
+{
+    if(a.fen!=b.fen)
+        return a.fen>b.fen;
+    else if (strcmp(a.xuehao,b.xuehao)<0)
+        return 1;
+    else
+        return 0;
+}
+int main()
+{
+    int i,n,m,l,x,k,sum,ans;
+    int c[20];
+    while(scanf("%d",&n)&&n)
+    {
+        scanf("%d %d",&m,&l);
+        memset(c,0,sizeof(c));
+        for(i=1;i<=m;i++)
+        {
+            scanf("%d",&c[i]);
         }
-        int k = 0;
-        for ( i = 0; i < studentNum; i++ ){
-            char account[21];
-            scanf("%s",account);
-            int acNum;
-            scanf("%d",&acNum);
-            int ac[acNum] , j , totalScore = 0;
-            for ( j = 0; j < acNum; j++ ){
-                scanf("%d",&ac[j]);
-                totalScore = problemScore[ac[j]] + totalScore;
+        for(i=1,ans=0;i<=n;i++)
+        {
+            sum=0;
+            scanf("%s %d",data[i].xuehao,&k);
+            while(k--)
+            {
+                scanf("%d",&x);
+                sum+=c[x];
             }
-            if( totalScore >= score ){
-                allAcStudent[k++].score = totalScore;
-                allAcStudent[k++].number = account;
-            }
+            data[i].fen=sum;
+            if(data[i].fen>=l)
+                ans++;
         }
-        if ( k == 0){
-            printf("%d\n",0);
-        } else{
-            int j;
-            for ( i = 0; i < k - 1; i++ ){
-                for ( j = i+1; j < k; j++ ){
-                    if ( allAcStudent[i].score > allAcStudent[j].score ){
-                        student tmp = allAcStudent[i];
-                        allAcStudent[i] = allAcStudent[j];
-                        allAcStudent[j] = tmp;
-                    }
-                }
-            }
-            for ( i = 0; i < k; i++ ){
-                printf("%s %d\n",allAcStudent[i].number,allAcStudent[i].score);
-            }
-        }
+        sort(data+1,data+n+1,cmp);
+        printf("%d\n",ans);
+        for(i=1;i<=ans;i++)
+            printf("%s %d\n",data[i].xuehao,data[i].fen);
     }
     return 0;
 }
